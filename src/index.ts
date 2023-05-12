@@ -50,4 +50,18 @@ co.scan(products[0]);
 // additional atv for rule stacking, should be same as price above.
 co.scan(products[2]);
 
-console.log(`$${co.total().toFixed(2)}`);
+console.log(`$${co.total().toFixed(2)}\n\n`);
+
+co.clearCart();
+
+console.log(`### 6 atv ###`);
+
+co.scan(products[2]);
+co.scan(products[2]);
+co.scan(products[2]);
+co.scan(products[2]);
+co.scan(products[2]);
+co.scan(products[2]);
+// pricing rule should be applied twice yielding 438
+
+console.log(`$${co.total().toFixed(2)}\n\n`);

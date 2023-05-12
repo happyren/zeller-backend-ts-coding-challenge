@@ -8,6 +8,7 @@ export type PricingRuleCompilerItem = {
 
 export const PricingRuleCompiler = ((pricingRules: PricingRule[] = []) => {
   let itemList: PricingRuleCompilerItem[] = [];
+  let applyCounter = 0;
 
   const calculateSubtotal = (items: PricingRuleCompilerItem[]): number => {
     return items.reduce((total, item) => {
@@ -50,16 +51,18 @@ export const PricingRuleCompiler = ((pricingRules: PricingRule[] = []) => {
     if (value > appliedItemList.length) {
       console.log('Not enough items to apply free item');
       return appliedItemList;
+    } else if (value < 0) {
+      console.log('Free item cannot be less than 0');
+      return appliedItemList;
     } else {
       return appliedItemList.map((item, index) => {
-        if (index < value) {
+        if (index < value * applyCounter) {
           return {
             ...item,
             price: 0
           };
-        } else {
-          return item;
         }
+        return item;
       });
     }
   };
@@ -76,6 +79,14 @@ export const PricingRuleCompiler = ((pricingRules: PricingRule[] = []) => {
     return freePriceUpdate(appliedItemList, value);
   }
 
+  const setSkuItemsActionAppliedCounter = (product: string, conditionMeasuredQuantity: number, value: number): number => {
+    const result = Math.floor((conditionMeasuredQuantity - (conditionMeasuredQuantity % value)) / value);
+    if (result > 0 && product === 'totalQuantity' || product === 'subtotal') {
+      return 1;
+    }
+    return result;
+  }
+
   const evaluateConditionAgainstItemList = (condition: Condition, oldItemList: PricingRuleCompilerItem[]): boolean => {
     const { product, operator, value } = condition;
 
@@ -89,7 +100,8 @@ export const PricingRuleCompiler = ((pricingRules: PricingRule[] = []) => {
     }
 
     if (operator === 'eq') {
-      return conditionMeasuredQuantity === value;
+      applyCounter = setSkuItemsActionAppliedCounter(product, conditionMeasuredQuantity, value);
+      return applyCounter > 0 || conditionMeasuredQuantity === value;
     } else if (operator === 'gte') {
       return conditionMeasuredQuantity >= value;
     } else {
@@ -153,6 +165,7 @@ export const PricingRuleCompiler = ((pricingRules: PricingRule[] = []) => {
 
   return {
     generateNewItemListBySinglePricingRule,
+    setSkuItemsActionAppliedCounter,
     calculateByPricingRules,
     generateNewItemListByAction,
     evaluateConditionAgainstItemList,
