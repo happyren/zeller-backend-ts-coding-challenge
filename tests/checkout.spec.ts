@@ -30,7 +30,4 @@ describe("Checkout service", () => {
     co.scan(products[1]);
     expect(co.total()).toBe(1949.98);
   });
-
-
-
 });
