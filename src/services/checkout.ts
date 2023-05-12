@@ -6,11 +6,13 @@ export const Checkout = ((pricingRules?: PricingRule[]) => {
   const scannedProducts: Product[] = [];
 
   const scan = (product: Product) => {
-    throw new Error("Not implemented");
+    scannedProducts.push(product);
   }
 
   const total = () => {
-    throw new Error("Not implemented");
+    return scannedProducts.reduce((total, product) => {
+      return total + product.price;
+    }, 0);
   }
 
   const getScannedProducts = () => {
