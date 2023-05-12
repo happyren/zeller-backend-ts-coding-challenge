@@ -1,0 +1,26 @@
+[
+  {
+    "conditions": [{
+      "product": "atv",
+      "operator": "eq",
+      "value": 3
+    }],
+    "action": {
+      "product": "atv",
+      "type": "free",
+      "value": 1
+    }
+  },
+  {
+    "conditions": [{
+      "product": "ipd",
+      "operator": "gte",
+      "value": 5
+    }],
+    "action": {
+      "product": "ipd",
+      "type": "fixedPrice",
+      "value": 499.99
+    }
+  }
+]

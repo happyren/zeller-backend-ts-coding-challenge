@@ -46,3 +46,28 @@ Notes on implementation:
 - don't use any frameworks
 
 When you've finished, send through the link to your github-repo.
+
+### Usages
+
+- Install ```pnpm i```
+- Run index ```pnpm run start```
+- Run tests ```pnpm run test```
+
+[**pricing-rules.json**](./public/pricing-rules.json) will contain the pricing rules to apply to the checkout process, it's dynamic as described in the [type file](./src/types/PricingRule.ts):
+
+- Follow format to add new pricing rules
+- Pricing rules can be stacked (but will be evaluated following the pricing rule sequence)
+- Basic business logic check has been applied but it's limited, it should gracefully log issue and return unprocessed price:
+  - no > 100% discount 
+  - no < 0% discount 
+  - no free item more than existing item
+  - no < $0 fixed price
+
+[**product-catalogue**](./public/product-catalogue.json) will contain a list of products
+
+#### Additional test case for pricing rule stacking
+
+Scan 3 atv and 5 ipd in following sequence: atv, ipd, ipd, atv, ipd, ipd, ipd atv
+Total expected: $2718.95
+
+Because both pricing rules are applied to give buy 3 get 1 free atv.
