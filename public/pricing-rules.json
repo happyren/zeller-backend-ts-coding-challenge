@@ -1,0 +1,9 @@
+{
+  "pricingRules": [
+    {
+      "condition": {},
+      "action": {},
+      "priorityOrder": 1
+    }
+  ]
+}
