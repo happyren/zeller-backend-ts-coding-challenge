@@ -62,6 +62,7 @@ When you've finished, send through the link to your github-repo.
   - no < 0% discount 
   - no free item more than existing item
   - no < $0 fixed price
+  - if a product meets buy n get b free, there are kn products, there should be kb free.
 
 [**product-catalogue**](./public/product-catalogue.json) will contain a list of products
 
@@ -71,3 +72,8 @@ Scan 3 atv and 5 ipd in following sequence: atv, ipd, ipd, atv, ipd, ipd, ipd at
 Total expected: $2718.95
 
 Because both pricing rules are applied to give buy 3 get 1 free atv.
+
+Scan 6 atv
+Total expected: $438.00
+
+Because the buy 3 get 1 free should be applied twice.

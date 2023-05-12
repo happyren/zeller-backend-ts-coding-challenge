@@ -85,28 +85,21 @@ describe("Pricing rule compiler", () => {
         } as PricingRuleCompilerItem;
     });
 
-    const action3 = {
-      product: 'ipd',
-      type: 'free',
-      value: 1
-    } as Action;
-
-    const itemList3 = [{
-      sku: "ipd",
-      price: 0
-    }, {
-      sku: "ipd",
-      price: 549.99
-    }, {
-      sku: "ipd",
-      price: 549.99
-    }] as PricingRuleCompilerItem[];
-
-    it.each([[action1, itemList1], [action2, itemList2], [action3, itemList3]])('should be able to calculate by action', (action: Action, expectedItemList: PricingRuleCompilerItem[]) => {
+    it.each([[action1, itemList1], [action2, itemList2]])
+    ('should be able to calculate by action', (action: Action, expectedItemList: PricingRuleCompilerItem[]) => {
       const pricingRuleCompiler = PricingRuleCompiler();
       const result = pricingRuleCompiler.generateNewItemListByAction(action, originalItemList);
-
       expect(result).toStrictEqual(expectedItemList);
+    });
+  });
+
+  describe('setSkuItemsActionAppliedCounter', () => {
+    it.each([['atv', 2, 3, 0], ['atv', 3, 3, 1], ['atv', 7, 3, 2]])
+    ('should set counters to apply action several times if quantity condition met more than once', 
+    (product: string, conditionMeasuredQuantity: number, value: number, expected: number) => {
+      const pricingRuleCompiler = PricingRuleCompiler();
+      const result = pricingRuleCompiler.setSkuItemsActionAppliedCounter(product, conditionMeasuredQuantity, value);
+      expect(result).toBe(expected);
     });
   });
 
@@ -179,13 +172,23 @@ describe("Pricing rule compiler", () => {
       sku: "atv",
       name: "Apple TV",
       price: 109.50
+    },
+    {
+      sku: "atv",
+      name: "Apple TV",
+      price: 109.50
+    },
+    {
+      sku: "atv",
+      name: "Apple TV",
+      price: 109.50
     }];
 
     it('should handle pricingRule stacking', () => {
       const pricingRuleCompiler = PricingRuleCompiler([pricingRule1, pricingRule2]);
       const result = pricingRuleCompiler.calculateByPricingRules(extendedScannedProducts);
 
-      expect(result).toBe(1609.47);
+      expect(result).toBe(1718.97);
     })
   })
 });
